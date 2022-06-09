@@ -23,7 +23,7 @@ const Home: NextPage = () => {
         </p>
 
         <div className={styles.grid}>
-          <a href="http://localhost:3000/games/gugudan" className={styles.card}>
+          <a href="http://localhost:3000/games/Gugudan" className={styles.card}>
             <h2>구구단 &rarr;</h2>
             <p>Find in-depth information about Next.js features and API.</p>
           </a>

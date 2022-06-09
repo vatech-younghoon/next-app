@@ -25,7 +25,7 @@ export default function Gugudan() {
         onSubmit={(e: FormEvent<HTMLFormElement>) => {
           e.preventDefault();
           if (operands1 * operands2 === Number(myAnswer)) {
-            setQuizResult('정답입니다');
+            setQuizResult(`정답 ${myAnswer}`);
             setOperands1(RANDOM_NUMBER);
             setOperands2(RANDOM_NUMBER);
             return;
@@ -40,7 +40,7 @@ export default function Gugudan() {
           value={myAnswer}
           onChange={({ target: { value } }) => setMyAnswer(value)}
         />
-        <Styled.Button>입력!</Styled.Button>
+        <Styled.Button type="submit">입력!</Styled.Button>
       </Styled.Form>
       <Styled.Result>{quizResult}</Styled.Result>
     </Styled.Root>

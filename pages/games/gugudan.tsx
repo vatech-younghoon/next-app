@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 
 const Styled = {
   Root: styled.div``,
@@ -11,10 +11,19 @@ const Styled = {
 };
 export default function Gugudan() {
   const RANDOM_NUMBER = () => Math.ceil(Math.random() * 9);
+  const EMPTY_VALUE = '';
+
   const [operands1, setOperands1] = useState(RANDOM_NUMBER);
   const [operands2, setOperands2] = useState(RANDOM_NUMBER);
-  const [myAnswer, setMyAnswer] = useState<string>('');
-  const [quizResult, setQuizResult] = useState('');
+  const [myAnswer, setMyAnswer] = useState<string>(EMPTY_VALUE);
+  const [quizResult, setQuizResult] = useState(EMPTY_VALUE);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current !== null) {
+      inputRef.current.focus();
+    }
+  }, [quizResult]);
 
   return (
     <Styled.Root>
@@ -28,13 +37,15 @@ export default function Gugudan() {
             setQuizResult(`정답 ${myAnswer}`);
             setOperands1(RANDOM_NUMBER);
             setOperands2(RANDOM_NUMBER);
+            setMyAnswer(EMPTY_VALUE);
             return;
           }
-          setMyAnswer('');
-          setQuizResult('땡!');
+          setQuizResult(`땡 ${myAnswer}`);
+          setMyAnswer(EMPTY_VALUE);
         }}
       >
         <Styled.AnswerInput
+          ref={inputRef}
           name="answer"
           type="number"
           value={myAnswer}

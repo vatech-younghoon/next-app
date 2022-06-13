@@ -25,10 +25,24 @@ const Home: NextPage = () => {
         <div className={styles.grid}>
           <a href="http://localhost:3000/games/Gugudan" className={styles.card}>
             <h2>구구단 &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
+            <p>구구단 게임 입니다. react-hook-form과 yup validation을 추가한</p>
           </a>
 
-          <a href="http://localhost:3000/games/gugudan" className={styles.card}>
+          <a
+            href="http://localhost:3000/games/Gugudan2"
+            className={styles.card}
+          >
+            <h2>구구단2 &rarr;</h2>
+            <p>
+              구구단 게임 입니다. react-hook-form은 추가됬지만 input에 숫자만
+              입력 가능합니다.
+            </p>
+          </a>
+
+          <a
+            href="http://localhost:3000/games/WordRelay"
+            className={styles.card}
+          >
             <h2>끝말잇기 &rarr;</h2>
             <p>Learn about Next.js in an interactive course with quizzes!</p>
           </a>

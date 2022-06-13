@@ -17,13 +17,7 @@ type Inputs_T = {
   answer: string;
 };
 
-const schema = yup
-  .object({
-    answer: yup.number().required(),
-  })
-  .required();
-
-export default function Gugudan() {
+export default function Gugudan2() {
   const RANDOM_NUMBER = () => Math.ceil(Math.random() * 9);
   const EMPTY_VALUE = '';
 
@@ -33,9 +27,7 @@ export default function Gugudan() {
     formState: { errors },
     setFocus,
     reset,
-  } = useForm<Inputs_T>({
-    resolver: yupResolver(schema),
-  });
+  } = useForm<Inputs_T>();
 
   const [operands1, setOperands1] = useState(RANDOM_NUMBER);
   const [operands2, setOperands2] = useState(RANDOM_NUMBER);
@@ -62,8 +54,10 @@ export default function Gugudan() {
         {operands1} 곱하기 {operands2} 은
       </Styled.Question>
       <Styled.Form onSubmit={handleSubmit(onSubmit)}>
-        <Styled.AnswerInput {...register('answer', { required: true })} />
-        {errors.answer && <span>숫자를 입력해 주세요</span>}
+        <Styled.AnswerInput
+          type="number"
+          {...register('answer', { required: true })}
+        />
         <input type="submit" />
       </Styled.Form>
       <Styled.Result>{quizResult}</Styled.Result>

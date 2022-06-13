@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -16,16 +16,9 @@ type Inputs_T = {
   answer: string;
 };
 
-const schema = yup
-  .object({
-    answer: yup
-      .string()
-      .matches(/^[a-zA-Z]*$/)
-      .required(),
-  })
-  .required();
-
 export default function WordRelay() {
+  const ONLY_ALPHABET = /^[a-zA-Z]*$/;
+
   const [givenWord, setGivenWord] = useState('zeroCho');
   const [result, setResult] = useState('');
 
@@ -35,9 +28,7 @@ export default function WordRelay() {
     formState: { errors },
     setFocus,
     reset,
-  } = useForm<Inputs_T>({
-    resolver: yupResolver(schema),
-  });
+  } = useForm<Inputs_T>();
 
   const onSubmit: SubmitHandler<Inputs_T> = (data) => {
     if (givenWord.charAt(givenWord.length - 1) !== data.answer.charAt(0)) {
@@ -56,8 +47,18 @@ export default function WordRelay() {
     <Styled.Root>
       <Styled.Word>{givenWord}</Styled.Word>
       <Styled.Form onClick={handleSubmit(onSubmit)}>
-        <Styled.AnswerInput {...register('answer', { required: true })} />
-        {errors.answer && <span>{errors.answer.message}</span>}
+        <Styled.AnswerInput
+          type="text"
+          {...register('answer', {
+            required: true,
+            onChange: function (e) {
+              if (!ONLY_ALPHABET.test(e.target.value)) {
+                alert('?');
+                return;
+              }
+            },
+          })}
+        />
         <Styled.Button> 클릭 </Styled.Button>
       </Styled.Form>
       <Styled.Result>{result}</Styled.Result>

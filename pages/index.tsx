@@ -44,7 +44,18 @@ const Home: NextPage = () => {
             className={styles.card}
           >
             <h2>끝말잇기 &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
+            <p>끝말잇기 게임입니다. 알파벳이 입력된다면 에러를 뱉을겁니다.</p>
+          </a>
+
+          <a
+            href="http://localhost:3000/games/WordRelay2"
+            className={styles.card}
+          >
+            <h2>끝말잇기2 &rarr;</h2>
+            <p>
+              두 번째 끝말잇기입니다. 숫자는 인풋값에 입력을 할 수
+              없습니다.(미완성)
+            </p>
           </a>
 
           <a

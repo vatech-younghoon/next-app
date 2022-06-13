@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { FormEvent, useEffect, useRef, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 const Styled = {
   Root: styled.div``,
@@ -9,20 +10,40 @@ const Styled = {
   Button: styled.button``,
   Result: styled.div``,
 };
+
+type Inputs_T = {
+  answer: string;
+};
+
 export default function Gugudan() {
   const RANDOM_NUMBER = () => Math.ceil(Math.random() * 9);
   const EMPTY_VALUE = '';
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setFocus,
+    reset,
+  } = useForm<Inputs_T>();
+
   const [operands1, setOperands1] = useState(RANDOM_NUMBER);
   const [operands2, setOperands2] = useState(RANDOM_NUMBER);
-  const [myAnswer, setMyAnswer] = useState<string>(EMPTY_VALUE);
   const [quizResult, setQuizResult] = useState(EMPTY_VALUE);
-  const inputRef = useRef<HTMLInputElement>(null);
+
+  const onSubmit: SubmitHandler<Inputs_T> = (data) => {
+    if (operands1 * operands2 === Number(data.answer)) {
+      setQuizResult(`정답 ${data.answer}`);
+      setOperands1(RANDOM_NUMBER);
+      setOperands2(RANDOM_NUMBER);
+      return;
+    }
+    setQuizResult(`땡 ${data.answer}`);
+  };
 
   useEffect(() => {
-    if (inputRef.current !== null) {
-      inputRef.current.focus();
-    }
+    setFocus('answer');
+    reset({ answer: '' });
   }, [quizResult]);
 
   return (
@@ -30,28 +51,10 @@ export default function Gugudan() {
       <Styled.Question>
         {operands1} 곱하기 {operands2} 은
       </Styled.Question>
-      <Styled.Form
-        onSubmit={(e: FormEvent<HTMLFormElement>) => {
-          e.preventDefault();
-          if (operands1 * operands2 === Number(myAnswer)) {
-            setQuizResult(`정답 ${myAnswer}`);
-            setOperands1(RANDOM_NUMBER);
-            setOperands2(RANDOM_NUMBER);
-            setMyAnswer(EMPTY_VALUE);
-            return;
-          }
-          setQuizResult(`땡 ${myAnswer}`);
-          setMyAnswer(EMPTY_VALUE);
-        }}
-      >
-        <Styled.AnswerInput
-          ref={inputRef}
-          name="answer"
-          type="number"
-          value={myAnswer}
-          onChange={({ target: { value } }) => setMyAnswer(value)}
-        />
-        <Styled.Button type="submit">입력!</Styled.Button>
+      <Styled.Form onSubmit={handleSubmit(onSubmit)}>
+        <Styled.AnswerInput {...register('answer', { required: true })} />
+        {errors.answer && <span>This field is required</span>}
+        <input type="submit" />
       </Styled.Form>
       <Styled.Result>{quizResult}</Styled.Result>
     </Styled.Root>

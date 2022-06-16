@@ -71,19 +71,29 @@ function play(tryNumbers: number[], targetNumbers: number[]) {
 
 export default function BaseBall() {
   const MAX_NUMBER_SIZE = 4;
+  const MAX_GAME_ROUND = 10;
   const BLANK = '';
 
-  const [randNumbers] = useState<number[]>(getRandomNumbers(MAX_NUMBER_SIZE));
+  const [randNumbers, setRandNumber] = useState<number[]>(
+    getRandomNumbers(MAX_NUMBER_SIZE),
+  );
   const [input, setInput] = useState(BLANK);
   const [result, setResult] = useState<IResult[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const onHandleRestGame = () => {
+    alert('게임 종료. 게임을 다시 시작합니다.');
+    setInput('');
+    setResult([]);
+    setRandNumber(getRandomNumbers(MAX_NUMBER_SIZE));
+  };
   console.log(randNumbers);
   return (
     <Styled.Root>
       <Styled.Form
         onSubmit={(e: FormEvent<HTMLFormElement>) => {
           e.preventDefault();
+
           const inputs = input.split('').map((item) => Number(item));
           if (!isValidate(inputs, randNumbers)) return;
           const [strike, ball] = play(inputs, randNumbers);
@@ -96,6 +106,10 @@ export default function BaseBall() {
             },
           ]);
           setInput(BLANK);
+          if (result.length >= MAX_GAME_ROUND) {
+            onHandleRestGame();
+            return;
+          }
         }}
       >
         <Styled.Input
@@ -113,7 +127,11 @@ export default function BaseBall() {
       <Styled.Result>시도 {result.length}</Styled.Result>
       <Styled.ResultContainer>
         {result.map((item) => (
-          <BaseBallResult key={v4()} result={item} />
+          <BaseBallResult
+            key={v4()}
+            result={item}
+            onHandleResetGame={onHandleRestGame}
+          />
         ))}
       </Styled.ResultContainer>
     </Styled.Root>
